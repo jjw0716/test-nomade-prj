@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack --force)",
+      "Read(//Users/jeongjiwook/test-claude/**)",
+      "Bash(npx create-next-app@latest nomadkr --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(claude mcp:*)",
+      "Bash(ls -la /Users/jeongjiwook/test-claude/test-nomade-prj/.claude*)",
+      "Read(//Users/jeongjiwook/**)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); keys=[k for k in d.keys\\(\\)]; print\\(keys\\)\")",
+      "Bash(git -C /Users/jeongjiwook/test-claude/test-nomade-prj status)",
+      "Bash(gh auth:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  },
+  "disabledMcpjsonServers": [
+    "context7"
+  ]
+}
