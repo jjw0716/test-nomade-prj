@@ -1,121 +1,109 @@
 "use client";
 
-import { useState } from "react";
-import { LayoutGrid, Map } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { Budget, District, Environment, Season, FilterState } from "@/lib/data";
 
-type SortOption = "score" | "cost" | "internet";
-type TagFilter = "바다" | "카페많음" | "저렴";
-type ViewMode = "grid" | "map";
+interface FilterBarProps {
+  filters: FilterState;
+  onChange: (filters: FilterState) => void;
+}
 
-const sortOptions: { value: SortOption; label: string }[] = [
-  { value: "score", label: "노마드 점수 ▼" },
-  { value: "cost", label: "저렴한 순" },
-  { value: "internet", label: "인터넷 속도" },
-];
+const budgetOptions: Budget[] = ["100만원이하", "100~200만원", "200만원이상"];
+const districtOptions: District[] = ["수도권", "경상도", "전라도", "강원도", "제주도", "충청도"];
+const environmentOptions: Environment[] = ["자연친화", "도심선호", "카페작업", "코워킹 필수"];
+const seasonOptions: Season[] = ["봄", "여름", "가을", "겨울"];
 
-const tagOptions: { value: TagFilter; label: string }[] = [
-  { value: "바다", label: "🌊 바다" },
-  { value: "카페많음", label: "☕ 카페많음" },
-  { value: "저렴", label: "💰 저렴" },
-];
+const activeClass = "border-violet-500 bg-violet-900/40 text-violet-300";
+const inactiveClass = "border-zinc-700 text-zinc-500 hover:border-zinc-600 hover:text-zinc-400";
+const btnBase = "px-3 py-1.5 text-xs rounded-md border transition-all font-mono";
 
-export function FilterBar() {
-  const [activeSort, setActiveSort] = useState<SortOption>("score");
-  const [activeTags, setActiveTags] = useState<Set<TagFilter>>(new Set());
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+function FilterGroup({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <span className="text-xs text-zinc-500 font-mono shrink-0 w-16">{label}</span>
+      <div className="flex flex-wrap gap-1.5">{children}</div>
+    </div>
+  );
+}
 
-  const toggleTag = (tag: TagFilter) => {
-    setActiveTags((prev) => {
-      const next = new Set(prev);
-      if (next.has(tag)) next.delete(tag);
-      else next.add(tag);
-      return next;
-    });
+export function FilterBar({ filters, onChange }: FilterBarProps) {
+  const toggleBudget = (value: Budget) => {
+    onChange({ ...filters, budget: filters.budget === value ? null : value });
+  };
+
+  const toggleDistrict = (value: District | null) => {
+    onChange({ ...filters, district: value });
+  };
+
+  const toggleEnvironment = (value: Environment) => {
+    const next = filters.environment.includes(value)
+      ? filters.environment.filter((e) => e !== value)
+      : [...filters.environment, value];
+    onChange({ ...filters, environment: next });
+  };
+
+  const toggleSeason = (value: Season) => {
+    const next = filters.bestSeason.includes(value)
+      ? filters.bestSeason.filter((s) => s !== value)
+      : [...filters.bestSeason, value];
+    onChange({ ...filters, bestSeason: next });
   };
 
   return (
-    <div
-      id="cities"
-      className="border border-zinc-800 rounded-lg bg-zinc-900/50 px-4 py-3"
-    >
-      <div className="flex flex-wrap items-center gap-3">
-        {/* Sort label */}
-        <span className="text-xs text-zinc-500 font-mono shrink-0">정렬:</span>
-
-        {/* Sort options */}
-        <div className="flex flex-wrap gap-1.5">
-          {sortOptions.map((opt) => (
-            <button
-              key={opt.value}
-              onClick={() => setActiveSort(opt.value)}
-              className={cn(
-                "px-3 py-1.5 text-xs rounded-md border transition-all font-mono",
-                activeSort === opt.value
-                  ? "border-violet-500 bg-violet-900/40 text-violet-300"
-                  : "border-zinc-700 text-zinc-500 hover:border-zinc-600 hover:text-zinc-400"
-              )}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="hidden sm:block w-px h-4 bg-zinc-700 mx-1" />
-
-        {/* Filter label */}
-        <span className="text-xs text-zinc-500 font-mono shrink-0">필터:</span>
-
-        {/* Tag filters */}
-        <div className="flex flex-wrap gap-1.5">
-          {tagOptions.map((tag) => (
-            <button
-              key={tag.value}
-              onClick={() => toggleTag(tag.value)}
-              className={cn(
-                "px-3 py-1.5 text-xs rounded-md border transition-all",
-                activeTags.has(tag.value)
-                  ? "border-violet-500 bg-violet-900/40 text-violet-300"
-                  : "border-zinc-700 text-zinc-500 hover:border-zinc-600 hover:text-zinc-400"
-              )}
-            >
-              {tag.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Spacer */}
-        <div className="flex-1" />
-
-        {/* View toggle */}
-        <div className="flex items-center gap-1 border border-zinc-700 rounded-md p-0.5">
+    <div className="border border-zinc-800 rounded-lg bg-zinc-900/50 px-4 py-3 space-y-2.5">
+      <FilterGroup label="예산">
+        {budgetOptions.map((value) => (
           <button
-            onClick={() => setViewMode("grid")}
-            className={cn(
-              "p-1.5 rounded transition-all",
-              viewMode === "grid"
-                ? "bg-zinc-700 text-zinc-100"
-                : "text-zinc-500 hover:text-zinc-400"
-            )}
-            aria-label="그리드 보기"
+            key={value}
+            onClick={() => toggleBudget(value)}
+            className={cn(btnBase, filters.budget === value ? activeClass : inactiveClass)}
           >
-            <LayoutGrid className="h-3.5 w-3.5" />
+            {value}
           </button>
+        ))}
+      </FilterGroup>
+
+      <FilterGroup label="지역">
+        <button
+          onClick={() => toggleDistrict(null)}
+          className={cn(btnBase, filters.district === null ? activeClass : inactiveClass)}
+        >
+          전체
+        </button>
+        {districtOptions.map((value) => (
           <button
-            onClick={() => setViewMode("map")}
-            className={cn(
-              "p-1.5 rounded transition-all relative",
-              viewMode === "map"
-                ? "bg-zinc-700 text-zinc-100"
-                : "text-zinc-500 hover:text-zinc-400"
-            )}
-            aria-label="지도 보기"
+            key={value}
+            onClick={() => toggleDistrict(value)}
+            className={cn(btnBase, filters.district === value ? activeClass : inactiveClass)}
           >
-            <Map className="h-3.5 w-3.5" />
-            <span className="absolute -top-1 -right-1 text-[8px] bg-zinc-700 text-zinc-400 rounded px-0.5 font-mono">v2</span>
+            {value}
           </button>
-        </div>
-      </div>
+        ))}
+      </FilterGroup>
+
+      <FilterGroup label="환경">
+        {environmentOptions.map((value) => (
+          <button
+            key={value}
+            onClick={() => toggleEnvironment(value)}
+            className={cn(btnBase, filters.environment.includes(value) ? activeClass : inactiveClass)}
+          >
+            {value}
+          </button>
+        ))}
+      </FilterGroup>
+
+      <FilterGroup label="최고 계절">
+        {seasonOptions.map((value) => (
+          <button
+            key={value}
+            onClick={() => toggleSeason(value)}
+            className={cn(btnBase, filters.bestSeason.includes(value) ? activeClass : inactiveClass)}
+          >
+            {value}
+          </button>
+        ))}
+      </FilterGroup>
     </div>
   );
 }
