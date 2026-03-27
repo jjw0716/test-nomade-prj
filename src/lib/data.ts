@@ -141,6 +141,10 @@ export const cities: City[] = [
   },
 ];
 
+export function getCityById(id: number): City | undefined {
+  return cities.find((city) => city.id === id);
+}
+
 export const meetups: Meetup[] = [
   { id: 1, city: "서울", date: "3월 22일", dayOfWeek: "토", rsvp: 14 },
   { id: 2, city: "제주", date: "3월 25일", dayOfWeek: "화", rsvp: 8 },

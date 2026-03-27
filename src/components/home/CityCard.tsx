@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { City } from "@/lib/data";
@@ -25,9 +26,10 @@ export function CityCard({ city }: CityCardProps) {
   };
 
   return (
-    <div
+    <Link
+      href={`/city/${city.id}`}
       className={cn(
-        "relative border rounded-lg bg-zinc-900/60 transition-all duration-200",
+        "relative border rounded-lg bg-zinc-900/60 transition-all duration-200 block",
         "hover:border-violet-600/60 hover:bg-zinc-900/80 hover:shadow-[0_0_20px_rgba(124,58,237,0.08)]",
         city.featured
           ? "border-violet-600/50 shadow-[inset_3px_0_0_0_rgba(124,58,237,0.8)]"
@@ -80,7 +82,7 @@ export function CityCard({ city }: CityCardProps) {
       {/* Like / Dislike */}
       <div className="border-t border-zinc-800/50 px-3 py-2 flex items-center gap-3">
         <button
-          onClick={handleLike}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleLike(); }}
           className={cn(
             "flex items-center gap-1.5 text-xs transition-colors",
             vote === "like" ? "text-green-400" : "text-zinc-500 hover:text-green-400"
@@ -90,7 +92,7 @@ export function CityCard({ city }: CityCardProps) {
           <span className="font-mono">{likeCount}</span>
         </button>
         <button
-          onClick={handleDislike}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDislike(); }}
           className={cn(
             "flex items-center gap-1.5 text-xs transition-colors",
             vote === "dislike" ? "text-red-400" : "text-zinc-500 hover:text-red-400"
@@ -100,6 +102,6 @@ export function CityCard({ city }: CityCardProps) {
           <span className="font-mono">{dislikeCount}</span>
         </button>
       </div>
-    </div>
+    </Link>
   );
 }
