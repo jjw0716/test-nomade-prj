@@ -1,12 +1,16 @@
-import { cities } from "@/lib/data";
+import type { City } from "@/lib/data";
 import { CityCard } from "./CityCard";
 
-export function CityCardGrid() {
+interface CityCardGridProps {
+  cities: City[];
+}
+
+export function CityCardGrid({ cities }: CityCardGridProps) {
   return (
     <section>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-mono text-zinc-500">
-          <span className="text-violet-500">▸</span> 추천 도시 목록{" "}
+          <span className="text-violet-500">▸</span> 도시 리스트{" "}
           <span className="text-zinc-700">({cities.length}개)</span>
         </h2>
       </div>
