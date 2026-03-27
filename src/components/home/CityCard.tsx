@@ -78,7 +78,7 @@ export function CityCard({ city }: CityCardProps) {
       </div>
 
       {/* Like / Dislike */}
-      <div className="border-t border-zinc-800/50 px-3 py-2 flex items-center gap-3">
+      <div className="border-t border-zinc-800/50 px-3 py-2 flex items-center justify-between">
         <button
           onClick={handleLike}
           className={cn(
@@ -96,8 +96,8 @@ export function CityCard({ city }: CityCardProps) {
             vote === "dislike" ? "text-red-400" : "text-zinc-500 hover:text-red-400"
           )}
         >
-          <ThumbsDown className="h-3.5 w-3.5" />
           <span className="font-mono">{dislikeCount}</span>
+          <ThumbsDown className="h-3.5 w-3.5" />
         </button>
       </div>
     </div>
