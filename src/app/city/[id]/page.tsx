@@ -10,7 +10,7 @@ interface CityPageProps {
 
 export default async function CityPage({ params }: CityPageProps) {
   const { id } = await params;
-  const city = getCityById(Number(id));
+  const city = await getCityById(Number(id));
 
   if (!city) {
     notFound();

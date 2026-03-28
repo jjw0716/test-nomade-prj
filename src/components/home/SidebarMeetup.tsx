@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Calendar } from "lucide-react";
-import { meetups } from "@/lib/data";
+import { getMeetups } from "@/lib/data";
 import { Separator } from "@/components/ui/separator";
 
-export function SidebarMeetup() {
+export async function SidebarMeetup() {
+  const meetups = await getMeetups();
+
   return (
     <div
       id="meetups"

@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { cities } from "@/lib/data";
-import type { FilterState } from "@/lib/data";
+import type { City, FilterState } from "@/lib/data";
 import { FilterBar } from "./FilterBar";
 import { CityCardGrid } from "./CityCardGrid";
+
+interface CitySectionProps {
+  cities: City[];
+}
 
 const initialFilters: FilterState = {
   budget: null,
@@ -13,12 +16,10 @@ const initialFilters: FilterState = {
   bestSeason: [],
 };
 
-export function CitySection() {
+export function CitySection({ cities }: CitySectionProps) {
   const [filters, setFilters] = useState<FilterState>(initialFilters);
 
-  const sorted = [...cities].sort((a, b) => b.likes - a.likes);
-
-  const filtered = sorted.filter((city) => {
+  const filtered = cities.filter((city) => {
     if (filters.budget !== null && city.budget !== filters.budget) return false;
     if (filters.district !== null && city.district !== filters.district) return false;
     if (filters.environment.length > 0 && !filters.environment.every((e) => city.environment.includes(e))) return false;

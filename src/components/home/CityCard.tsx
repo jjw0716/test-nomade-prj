@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { City } from "@/lib/data";
+import { incrementLikes, incrementDislikes } from "@/app/actions";
 
 interface CityCardProps {
   city: City;
@@ -13,8 +14,23 @@ interface CityCardProps {
 export function CityCard({ city }: CityCardProps) {
   const [vote, setVote] = useState<"like" | "dislike" | null>(null);
 
-  const handleLike = () => setVote((prev) => (prev === "like" ? null : "like"));
-  const handleDislike = () => setVote((prev) => (prev === "dislike" ? null : "dislike"));
+  const handleLike = () => {
+    if (vote === "like") {
+      setVote(null);
+    } else {
+      setVote("like");
+      incrementLikes(city.id);
+    }
+  };
+
+  const handleDislike = () => {
+    if (vote === "dislike") {
+      setVote(null);
+    } else {
+      setVote("dislike");
+      incrementDislikes(city.id);
+    }
+  };
 
   const likeCount = city.likes + (vote === "like" ? 1 : 0);
   const dislikeCount = city.dislikes + (vote === "dislike" ? 1 : 0);

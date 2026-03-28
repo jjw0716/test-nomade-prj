@@ -1,9 +1,11 @@
 import { Users } from "lucide-react";
-import { recentMembers } from "@/lib/data";
+import { getMembers } from "@/lib/data";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
-export function SidebarMembers() {
+export async function SidebarMembers() {
+  const members = await getMembers();
+
   return (
     <div className="border border-zinc-800 rounded-lg bg-zinc-900/60 overflow-hidden">
       {/* Header */}
@@ -16,7 +18,7 @@ export function SidebarMembers() {
       {/* Content */}
       <div className="px-4 py-4">
         <div className="flex flex-wrap gap-2 mb-3">
-          {recentMembers.map((member) => (
+          {members.map((member) => (
             <Avatar key={member.id} className="h-8 w-8">
               <AvatarFallback className={cn("text-xs font-bold text-white", member.color)}>
                 {member.initial}

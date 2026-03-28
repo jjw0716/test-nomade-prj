@@ -1,9 +1,10 @@
 import { Plane } from "lucide-react";
-import { nomadStatus } from "@/lib/data";
+import { getNomadStatus } from "@/lib/data";
 
-const maxCount = Math.max(...nomadStatus.map((n) => n.count));
+export async function SidebarNomads() {
+  const nomadStatus = await getNomadStatus();
+  const maxCount = Math.max(...nomadStatus.map((n) => n.count));
 
-export function SidebarNomads() {
   return (
     <div className="border border-zinc-800 rounded-lg bg-zinc-900/60 overflow-hidden">
       {/* Header */}
