@@ -39,6 +39,7 @@
     "node_modules",
     "issue-1",
     "issue-2",
-    "frontend"
+    "frontend",
+    "e2e"
   ]
 }

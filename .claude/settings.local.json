@@ -24,7 +24,8 @@
       "Bash(npx next:*)"
     ]
   },
-  "disabledMcpjsonServers": [
-    "context7"
-  ]
+  "enabledMcpjsonServers": [
+    "supabase", "context7"
+  ],
+  "enableAllProjectMcpServers": true
 }
