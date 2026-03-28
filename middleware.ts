@@ -27,8 +27,10 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // 토큰 갱신 (getUser() 호출 시 자동 처리)
-  const { data: { user } } = await supabase.auth.getUser();
+  // 토큰 갱신 — 만료·없는 토큰은 null user로 처리
+  const { data: { user } } = await supabase.auth.getUser().catch(() => ({
+    data: { user: null },
+  }));
 
   // 보호 라우트: 비로그인 상태로 /dashboard 접근 시 /login으로 redirect
   if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
